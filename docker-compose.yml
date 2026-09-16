@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: shopora
+      POSTGRES_USER: shopora
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-shopora_dev_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopora -d shopora"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    environment:
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+psycopg://shopora:${POSTGRES_PASSWORD:-shopora_dev_password}@postgres:5432/shopora
+      LANGGRAPH_DATABASE_URL: postgresql://shopora:${POSTGRES_PASSWORD:-shopora_dev_password}@postgres:5432/shopora
+      REDIS_URL: redis://redis:6379/0
+      CORS_ORIGINS: http://localhost:5173
+      ALLOWED_HOSTS: localhost,127.0.0.1,api
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY before starting}
+      GROQ_API_KEY: ${GROQ_API_KEY:?Set GROQ_API_KEY before starting}
+      MODEL_NAME: ${MODEL_NAME:-llama-3.3-70b-versatile}
+      SEMANTIC_SEARCH_ENABLED: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:

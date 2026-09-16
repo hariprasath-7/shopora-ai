@@ -1,0 +1,26 @@
+# Environment variables (SECRETS - DO NOT COMMIT)
+.env
+*.env
+!.env.example
+
+# Python / Virtual Environment
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Databases & Storage
+*.db
+*.sqlite
+data/*.db
+data/
+
+# Frontend dependencies & builds
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# System files
+.DS_Store
+Thumbs.db

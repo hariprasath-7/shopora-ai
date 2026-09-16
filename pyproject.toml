@@ -1,0 +1,54 @@
+[project]
+name = "ai-shopping-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "alembic>=1.19.0",
+    "fastapi>=0.141.1",
+    "langchain>=1.3.18",
+    "langchain-groq>=1.1.3",
+    "langgraph>=1.2.11",
+    "langgraph-checkpoint-postgres>=3.0.0",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.10.1",
+    "email-validator>=2.3.0",
+    "python-dotenv>=1.2.3",
+    "sqlalchemy>=2.0.52",
+    "streamlit>=1.62.0",
+    "uvicorn>=0.52.4",
+    "redis>=6.4.0",
+    "psycopg[binary]>=3.2.9",
+    "python-multipart>=0.0.20",
+    "pyjwt>=2.10.1",
+    "pwdlib[argon2]>=0.2.1",
+    "pgvector>=0.4.1",
+    "sentence-transformers>=5.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-cov>=7.0.0",
+    "httpx>=0.28.1",
+    "ruff>=0.13.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+# Two rules are deliberately relaxed for this codebase:
+# - B008: FastAPI's `Depends(...)` / `Query(...)` in argument defaults is the
+#   framework's documented dependency-injection pattern, not a real bug.
+# - BLE001: src/cache.py and src/search_service.py intentionally catch a broad
+#   Exception so a Redis outage or a semantic-search failure degrades
+#   gracefully instead of taking down the request.
+ignore = ["B008", "BLE001"]
+
+
