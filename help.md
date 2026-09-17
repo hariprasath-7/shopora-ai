@@ -1,0 +1,2 @@
+- to run the backend 
+    - `uv run uvicorn src.api:app`

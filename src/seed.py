@@ -1,5 +1,5 @@
-from .database import SessionLocal
-from .models import Product
+from src.database import SessionLocal
+from src.models import Product
 
 products = [
     Product(
