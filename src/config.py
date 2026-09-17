@@ -70,6 +70,8 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     settings = Settings()
+    print(settings.cors_origins, "aaaaaaaaaaaaa")
+    print(settings.allowed_hosts, "bbbbbbbbbbbbb")
     settings.validate_production()
     return settings
 
